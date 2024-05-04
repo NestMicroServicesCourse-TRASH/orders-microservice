@@ -13,7 +13,7 @@ export class OrdersService extends PrismaClient implements OnModuleInit {
 	private readonly logger = new Logger('OrderService');
 
 	constructor(
-		@Inject(PRODUCTS_MICROSERVICE) private readonly productsClient: ClientProxy
+		@Inject(PRODUCTS_MICROSERVICE) private readonly client: ClientProxy
 	) {
 		super();
 	}
@@ -30,7 +30,7 @@ export class OrdersService extends PrismaClient implements OnModuleInit {
 			const producIds = createOrderDto.items.map(item => item.productId)
 
 			const products: any[] = await firstValueFrom(
-				this.productsClient.send({ cmd: 'validate_products' }, producIds)
+				this.client.send({ cmd: 'validate_products' }, producIds)
 			);
 
 			// Calcular el total de la orden
@@ -138,7 +138,7 @@ export class OrdersService extends PrismaClient implements OnModuleInit {
 
 		const productIds = order.OrderItem.map(orderItem => orderItem.productId);
 		const products: any[] = await firstValueFrom(
-			this.productsClient.send({ cmd: 'validate_products' }, productIds)
+			this.client.send({ cmd: 'validate_products' }, productIds)
 		);
 
 		return {
